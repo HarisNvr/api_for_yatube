@@ -113,7 +113,7 @@ class TestCommentAPI:
 
         assert_msg = (
             'Проверьте, что для неавторизованного пользователя POST-запрос '
-            f'к `{self.comment_detail_url}` возвращает ответ со статусом 401.'
+            f'к `{self.comments_url}` возвращает ответ со статусом 401.'
         )
         data = {'text': self.TEXT_FOR_COMMENT}
         try:
@@ -124,13 +124,11 @@ class TestCommentAPI:
         except ValueError as error:
             raise AssertionError(
                 assert_msg + (
-                    f' В процессе выполнения запроса произошла ошибка: {error}'
+                    '\nВ процессе выполнения запроса произошла ошибка: '
+                    f'{error}'
                 )
             )
-        assert response.status_code == HTTPStatus.UNAUTHORIZED, (
-            'Проверьте, что для неавторизованного пользователя POST-запрос '
-            f'к `{self.comment_detail_url}` возвращает ответ со статусом 401.'
-        )
+        assert response.status_code == HTTPStatus.UNAUTHORIZED, assert_msg
         assert comment_cnt == Comment.objects.count(), (
             'Проверьте, что POST-запрос неавторизованного пользователя, '
             f'отправленный к `{self.comment_detail_url}`, не создаёт '

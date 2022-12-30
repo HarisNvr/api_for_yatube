@@ -206,11 +206,20 @@ class TestPostAPI:
         posts_conut = Post.objects.count()
 
         data = {'author': another_user.id, 'text': 'Статья номер 3'}
-        response = client.post(self.post_list_url, data=data)
-        assert response.status_code == HTTPStatus.UNAUTHORIZED, (
+        assert_msg = (
             'Проверьте, что POST-запрос неавторизованного пользователя к '
             f'`{self.post_list_url}` возвращает ответ со статусом 401.'
         )
+        try:
+            response = client.post(self.post_list_url, data=data)
+        except ValueError as error:
+            raise AssertionError(
+                assert_msg + (
+                    '\nВ процессе выполнения запроса произошла ошибка: '
+                    f'{error}'
+                )
+            )
+        assert response.status_code == HTTPStatus.UNAUTHORIZED, assert_msg
 
         assert posts_conut == Post.objects.count(), (
             'Проверьте, что POST-запрос неавторизованного пользователя к '
