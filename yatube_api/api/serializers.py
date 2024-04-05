@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from django.contrib.auth.models import User
 
 from posts.models import Post, Group, Comment, Follow
 
@@ -15,7 +16,33 @@ class FollowSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Follow
-        fields = ('user', 'following',)
+        fields = ('user', 'following')
+
+    def validate(self, data):
+        following_user = User.objects.filter(
+            username=self.context['request'].data.get('following')).first()
+
+        if 'following' not in self.context['request'].data:
+            raise serializers.ValidationError(
+                {'following': ['Обязательное поле.']}
+            )
+
+        if not following_user:
+            raise serializers.ValidationError(
+                {'following': ['Такого пользователя не существует.']}
+            )
+
+        if following_user == self.context['request'].user:
+            raise serializers.ValidationError(
+                {'following': ['Нельзя подписаться на самого себя!']})
+
+        if Follow.objects.filter(user=self.context['request'].user,
+                                 following=following_user).exists():
+            raise serializers.ValidationError(
+                {'following': ['Вы уже подписаны на этого пользователя.']}
+            )
+
+        return data
 
 
 class PostSerializer(serializers.ModelSerializer):
