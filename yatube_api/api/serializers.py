@@ -10,8 +10,8 @@ class FollowSerializer(serializers.ModelSerializer):
         slug_field='username'
     )
     following = serializers.SlugRelatedField(
-        read_only=True,
-        slug_field='username'
+        slug_field='username',
+        queryset=User.objects.all()
     )
 
     class Meta:
@@ -19,17 +19,13 @@ class FollowSerializer(serializers.ModelSerializer):
         fields = ('user', 'following')
 
     def validate(self, data):
+
         following_user = User.objects.filter(
             username=self.context['request'].data.get('following')).first()
 
         if 'following' not in self.context['request'].data:
             raise serializers.ValidationError(
                 {'following': ['Обязательное поле.']}
-            )
-
-        if not following_user:
-            raise serializers.ValidationError(
-                {'following': ['Такого пользователя не существует.']}
             )
 
         if following_user == self.context['request'].user:
