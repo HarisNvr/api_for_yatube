@@ -2,43 +2,40 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 
 from posts.models import Post, Group, Comment, Follow
+from rest_framework.validators import UniqueTogetherValidator
 
 
 class FollowSerializer(serializers.ModelSerializer):
     user = serializers.SlugRelatedField(
         read_only=True,
-        slug_field='username'
+        slug_field='username',
+        default=serializers.CurrentUserDefault()
     )
     following = serializers.SlugRelatedField(
         slug_field='username',
         queryset=User.objects.all()
     )
 
-    class Meta:
-        model = Follow
-        fields = ('user', 'following')
-
-    def validate(self, data):
-
+    def validate_following(self, data):
         following_user = User.objects.filter(
-            username=self.context['request'].data.get('following')).first()
-
-        if 'following' not in self.context['request'].data:
-            raise serializers.ValidationError(
-                {'following': ['Обязательное поле.']}
-            )
+            username=self.context['request'].data.get('following')
+        ).first()
 
         if following_user == self.context['request'].user:
             raise serializers.ValidationError(
-                {'following': ['Нельзя подписаться на самого себя!']})
-
-        if Follow.objects.filter(user=self.context['request'].user,
-                                 following=following_user).exists():
-            raise serializers.ValidationError(
-                {'following': ['Вы уже подписаны на этого пользователя.']}
+                'Нельзя подписаться на самого себя!'
             )
-
         return data
+
+    class Meta:
+        model = Follow
+        fields = ('user', 'following')
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Follow.objects.all(),
+                fields=('user', 'following'),
+                message='Вы уже подписаны на этого пользователя.')
+        ]
 
 
 class PostSerializer(serializers.ModelSerializer):
