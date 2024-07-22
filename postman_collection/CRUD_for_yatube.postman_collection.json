@@ -1,7 +1,7 @@
 {
 	"info": {
-		"_postman_id": "4eecdba8-a08e-49cb-8afa-c995acc450eb",
-		"name": "API_for_yatube",
+		"_postman_id": "bb17d0a0-e44d-4a4e-8248-d121d7e1a7e5",
+		"name": "CRUD_for_yatube",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "16131548"
 	},
@@ -16,27 +16,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"refresh\": {\"type\": \"string\"},",
-									"        \"access\": {\"type\": \"string\"},",
-									"    },",
-									"    \"required\": [\"refresh\", \"access\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
 									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
 									"    pm.expect(",
 									"        pm.response.status,",
 									"        \"На POST-запрос с корректными данными должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"    pm.collectionVariables.set(\"userAccessToken\", responseData.access);",
-									"    pm.collectionVariables.set(\"userRefreshToken\", responseData.refresh);",
+									"pm.test(\"Ответ должен содержать ключ `token`\", function () {",
+									"    pm.expect(",
+									"        pm.response,",
+									"        \"Ответ должен содержать ключ `token`\"",
+									"    ).to.have.jsonBody(\"token\");",
+									"    pm.collectionVariables.set(\"userToken\", pm.response.json().token);",
 									"    pm.collectionVariables.set(\"userUsername\", JSON.parse(request.data).username);",
 									"});",
 									""
@@ -58,7 +49,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/jwt/create/",
+							"raw": "http://127.0.0.1:8000/api/v1/api-token-auth/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -70,8 +61,7 @@
 							"path": [
 								"api",
 								"v1",
-								"jwt",
-								"create",
+								"api-token-auth",
 								""
 							]
 						}
@@ -85,27 +75,18 @@
 							"listen": "test",
 							"script": {
 								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"refresh\": {\"type\": \"string\"},",
-									"        \"access\": {\"type\": \"string\"},",
-									"    },",
-									"    \"required\": [\"refresh\", \"access\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
 									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
 									"    pm.expect(",
 									"        pm.response.status,",
 									"        \"На POST-запрос с корректными данными должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"    pm.collectionVariables.set(\"adminAccessToken\", responseData.access);",
-									"    pm.collectionVariables.set(\"adminRefreshToken\", responseData.refresh);",
+									"pm.test(\"Ответ должен содержать ключ `token`\", function () {",
+									"    pm.expect(",
+									"        pm.response,",
+									"        \"Ответ должен содержать ключ `token`\"",
+									"    ).to.have.jsonBody(\"token\");",
+									"    pm.collectionVariables.set(\"adminToken\", pm.response.json().token);",
 									"    pm.collectionVariables.set(\"adminUsername\", JSON.parse(request.data).username);",
 									"});",
 									""
@@ -127,7 +108,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/jwt/create/",
+							"raw": "http://127.0.0.1:8000/api/v1/api-token-auth/",
 							"protocol": "http",
 							"host": [
 								"127",
@@ -139,283 +120,7 @@
 							"path": [
 								"api",
 								"v1",
-								"jwt",
-								"create",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "refresh_token // No Auth",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"access\": {\"type\": \"string\"},",
-									"    },",
-									"    \"required\": [\"access\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На POST-запрос с корректными данными должен возвращаться ответ со статусом 200\"",
-									"    ).to.be.eql(\"OK\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"    pm.collectionVariables.set(\"adminAccessToken\", responseData.access);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"refresh\": \"{{adminRefreshToken}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/jwt/refresh/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"jwt",
-								"refresh",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "refresh_with_invalid_token // No Auth",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"detail\": {\"type\": \"string\"},",
-									"        \"code\": {\"type\": \"string\"}",
-									"    },",
-									"    \"required\": [\"detail\", \"code\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 401\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"Запрос с невалидным refresh-токеном должен возвращаться ответ со статусом 401\"",
-									"    ).to.be.eql(\"Unauthorized\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"});",
-									"pm.test('Значения полей в ответе должны соответствовать спецификации', function () {",
-									"    pm.expect(",
-									"        responseData.code,",
-									"        \"Убедитесь, что значение поля `code` в ответе соответствует спецификации API\"",
-									"    ).to.be.eql(\"token_not_valid\");",
-									"    pm.expect(",
-									"        responseData.detail,",
-									"        \"Убедитесь, что значение поля `detail` в ответе соответствует спецификации API\"",
-									"    ).to.be.eql(\"Token is invalid or expired\");",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"refresh\": \"invalid_token\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/jwt/refresh/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"jwt",
-								"refresh",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "verify_valid_token // No Auth",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На POST-запрос с валидным токеном должен возвращаться ответ со статусом 200\"",
-									"    ).to.be.eql(\"OK\");",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"token\": \"{{adminAccessToken}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/jwt/verify/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"jwt",
-								"verify",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "verify_invalid_token // No Auth",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"detail\": {\"type\": \"string\"},",
-									"        \"code\": {\"type\": \"string\"}",
-									"    },",
-									"    \"required\": [\"detail\", \"code\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 401\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На POST-запрос с невалидным токеном должен возвращаться ответ со статусом 401\"",
-									"    ).to.be.eql(\"Unauthorized\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"});",
-									"pm.test('Значения полей в ответе должны соответствовать спецификации', function () {",
-									"    pm.expect(",
-									"        responseData.code,",
-									"        \"Убедитесь, что значение поля `code` в ответе соответствует спецификации API\"",
-									"    ).to.be.eql(\"token_not_valid\");",
-									"    pm.expect(",
-									"        responseData.detail,",
-									"        \"Убедитесь, что значение поля `detail` в ответе соответствует спецификации API\"",
-									"    ).to.be.eql(\"Token is invalid or expired\");",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"token\": \"invalid_token\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/jwt/verify/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"jwt",
-								"verify",
+								"api-token-auth",
 								""
 							]
 						}
@@ -451,7 +156,7 @@
 			"name": "group_tests",
 			"item": [
 				{
-					"name": "get_group_list // No Auth",
+					"name": "get_group_list // User",
 					"event": [
 						{
 							"listen": "test",
@@ -476,7 +181,7 @@
 									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
 									"    pm.expect(",
 									"        pm.response.status,",
-									"        \"На запрос незарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
+									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
 									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
@@ -489,9 +194,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -515,7 +217,7 @@
 					"response": []
 				},
 				{
-					"name": "get_group_details // No Auth",
+					"name": "get_group_details // User",
 					"event": [
 						{
 							"listen": "test",
@@ -536,7 +238,7 @@
 									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
 									"    pm.expect(",
 									"        pm.response.status,",
-									"        \"На запрос незарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
+									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
 									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
@@ -548,9 +250,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [
 							{
@@ -583,7 +282,19 @@
 				}
 			],
 			"auth": {
-				"type": "noauth"
+				"type": "apikey",
+				"apikey": [
+					{
+						"key": "value",
+						"value": "Token {{userToken}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
+						"type": "string"
+					}
+				]
 			},
 			"event": [
 				{
@@ -779,7 +490,7 @@
 					"response": []
 				},
 				{
-					"name": "get_post_list // No Auth",
+					"name": "get_post_list // User",
 					"event": [
 						{
 							"listen": "test",
@@ -818,9 +529,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -844,91 +552,7 @@
 					"response": []
 				},
 				{
-					"name": "get_post_list_with_pagination // No Auth",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"count\": {\"type\": \"number\"},",
-									"    \"next\": {\"type\": [\"string\", \"null\"]},",
-									"    \"previous\": {\"type\": [\"string\", \"null\"]},",
-									"    \"results\": {",
-									"        \"type\": \"array\",",
-									"        \"items\": {",
-									"            \"type\": \"object\",",
-									"            \"properties\":{",
-									"                \"id\": {\"type\": \"number\"},",
-									"                \"author\": {\"type\": \"string\"},",
-									"                \"text\": {\"type\": \"string\"},",
-									"                \"pub_date\": {\"type\": \"string\"},",
-									"                \"image\": {\"type\": [\"string\", \"null\"]},",
-									"                \"group\": {\"type\": [\"number\", \"null\"]}",
-									"            },",
-									"            \"required\": [\"id\", \"author\", \"text\", \"pub_date\", \"image\", \"group\"],",
-									"            \"additionalProperties\": false",
-									"        }",
-									"    }",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
-									"    ).to.be.eql(\"OK\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.expect(",
-									"        pm.response,",
-									"        \"Убедитесь, что к эндпоинту `/api/v1/posts/` подключен пагинатор, использующий query-параметры `limit` и `offset`\"",
-									"    ).to.have.jsonSchema(responseSchema);",
-									"});"
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "noauth"
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/posts/?limit=1&offset=1",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"posts",
-								""
-							],
-							"query": [
-								{
-									"key": "limit",
-									"value": "1"
-								},
-								{
-									"key": "offset",
-									"value": "1"
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get_post_details // No Auth",
+					"name": "get_post_details // User",
 					"event": [
 						{
 							"listen": "test",
@@ -955,7 +579,7 @@
 									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
-									"pm.test('Структура ответа должна соответстовать ожидаемой', function () {",
+									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
 									"    pm.response.to.have.jsonSchema(responseSchema);",
 									"});",
 									""
@@ -965,9 +589,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1076,7 +697,7 @@
 					"response": []
 				},
 				{
-					"name": "update_post_with_put_request // No Auth",
+					"name": "update_post_with_put_request // User",
 					"event": [
 						{
 							"listen": "test",
@@ -1205,11 +826,16 @@
 				}
 			],
 			"auth": {
-				"type": "bearer",
-				"bearer": [
+				"type": "apikey",
+				"apikey": [
 					{
-						"key": "token",
-						"value": "{{userAccessToken}}",
+						"key": "value",
+						"value": "Token {{userToken}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
 						"type": "string"
 					}
 				]
@@ -1324,7 +950,7 @@
 					"response": []
 				},
 				{
-					"name": "get_comments // No Auth",
+					"name": "get_comments // User",
 					"event": [
 						{
 							"listen": "test",
@@ -1350,7 +976,7 @@
 									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
 									"    pm.expect(",
 									"        pm.response.status,",
-									"        \"На запрос незарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
+									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
 									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
@@ -1362,9 +988,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1390,7 +1013,7 @@
 					"response": []
 				},
 				{
-					"name": "get_comment_details // No Auth",
+					"name": "get_comment_details // User",
 					"event": [
 						{
 							"listen": "test",
@@ -1413,13 +1036,13 @@
 									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
 									"    pm.expect(",
 									"        pm.response.status,",
-									"        \"На запрос незарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
+									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
 									"    ).to.be.eql(\"OK\");",
 									"});",
 									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
 									"    pm.response.to.have.jsonSchema(responseSchema);",
 									"});",
-									"pm.test(\"Ответ должен содердать ожидаемые данные\", function () {",
+									"pm.test(\"Ответ должен содержать ожидаемые данные\", function () {",
 									"    pm.expect(responseData.id).to.eql(",
 									"        pm.collectionVariables.get(\"comment_id\"),",
 									"        \"Убедитесь, что поле `post` содержит id поста, указанный в url при запросе\"",
@@ -1435,9 +1058,6 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "noauth"
-						},
 						"method": "GET",
 						"header": [],
 						"url": {
@@ -1545,7 +1165,7 @@
 					"response": []
 				},
 				{
-					"name": "update_commetn_with_put_request // User",
+					"name": "update_comment_with_put_request // User",
 					"event": [
 						{
 							"listen": "test",
@@ -1637,7 +1257,8 @@
 									"        pm.response.status,",
 									"        \"На запрос автора комментария должен возвращаться ответ со статусом 204\"",
 									"    ).to.be.eql(\"No Content\");",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1706,21 +1327,11 @@
 						}
 					],
 					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userAccessToken}}",
-									"type": "string"
-								}
-							]
-						},
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"text\": \"Комментарий для проверки ограничения прав на редактирование / удаление\"\n}",
+							"raw": "{\n    \"text\": \"Комментарий для проверки ограничения прав доступа\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -1751,281 +1362,19 @@
 				}
 			],
 			"auth": {
-				"type": "bearer",
-				"bearer": [
+				"type": "apikey",
+				"apikey": [
 					{
-						"key": "token",
-						"value": "{{userAccessToken}}",
+						"key": "value",
+						"value": "Token {{userToken}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
 						"type": "string"
 					}
 				]
-			},
-			"event": [
-				{
-					"listen": "prerequest",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				},
-				{
-					"listen": "test",
-					"script": {
-						"type": "text/javascript",
-						"exec": [
-							""
-						]
-					}
-				}
-			]
-		},
-		{
-			"name": "follow_tests",
-			"item": [
-				{
-					"name": "create_subscription // User",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"user\": {\"type\": \"string\"},",
-									"        \"following\": {\"type\": \"string\"}",
-									"    },",
-									"    \"required\": [\"user\", \"following\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 201\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На запрос зарегистрированного пользователя с корректными данными должен возвращаться ответ со статусом 201\"",
-									"    ).to.be.eql(\"Created\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"});",
-									"pm.test('Значения полей в ответе должны соответствовать спецификации', function () {",
-									"    pm.expect(",
-									"        responseData.user,",
-									"        \"Убедитесь, что в ответе на запрос значением поля `user` является `username` пользователя, отправившего запрос\"",
-									"    ).to.be.eql(pm.collectionVariables.get(\"userUsername\"));",
-									"    pm.expect(",
-									"        responseData.following,",
-									"        \"Убедитесь, что в ответе на запрос значением поля `following` является `username` автора, на которого оформлена подписка\"",
-									"    ).to.be.eql(pm.collectionVariables.get(\"adminUsername\"));",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userAccessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"following\": \"{{adminUsername}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/follow/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"follow",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "get_follows // User",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseSchema = {",
-									"    \"type\": \"array\",",
-									"    \"items\": {",
-									"        \"type\": \"object\",",
-									"        \"properties\":{",
-									"            \"user\": {\"type\": \"string\"},",
-									"            \"following\": {\"type\": \"string\"}",
-									"        },",
-									"        \"required\": [\"user\", \"following\"],",
-									"        \"additionalProperties\": false",
-									"    }",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
-									"    ).to.be.eql(\"OK\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userAccessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/follow/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"follow",
-								""
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "search_follow // User",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"array\",",
-									"    \"items\": {",
-									"        \"type\": \"object\",",
-									"        \"properties\":{",
-									"            \"user\": {\"type\": \"string\"},",
-									"            \"following\": {\"type\": \"string\"}",
-									"        },",
-									"        \"required\": [\"user\", \"following\"],",
-									"        \"additionalProperties\": false",
-									"    }",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 200\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На запрос зарегистрированного пользователя должен возвращаться ответ со статусом 200\"",
-									"    ).to.be.eql(\"OK\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"});",
-									"pm.test(",
-									"    \"Перечень подписок должен содержать только элементы, удовлетворяющие условиям поиска\",",
-									"    function () {",
-									"        const assert_msg = \"Убедитесь, что в ответ на запрос содержит только данные подписок, удовлетворяющих условию поиска\"",
-									"        pm.expect(responseData.length > 0, assert_msg);",
-									"",
-									"        const expected_username = pm.request.url.query.get(\"search\");",
-									"        for (elem of responseData) {",
-									"            pm.expect(elem.following, assert_msg).to.be.eql(expected_username);",
-									"        };",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userAccessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/follow/?search={{adminUsername}}",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"follow",
-								""
-							],
-							"query": [
-								{
-									"key": "search",
-									"value": "{{adminUsername}}"
-								}
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"auth": {
-				"type": "noauth"
 			},
 			"event": [
 				{
@@ -2738,11 +2087,16 @@
 						}
 					],
 					"auth": {
-						"type": "bearer",
-						"bearer": [
+						"type": "apikey",
+						"apikey": [
 							{
-								"key": "token",
-								"value": "{{userAccessToken}}",
+								"key": "value",
+								"value": "Token {{userToken}}",
+								"type": "string"
+							},
+							{
+								"key": "key",
+								"value": "Authorization",
 								"type": "string"
 							}
 						]
@@ -2981,6 +2335,91 @@
 									"response": []
 								},
 								{
+									"name": "get_post_list // No Auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус-код ответа должен быть 401\", function () {",
+													"    pm.expect(",
+													"        pm.response.status,",
+													"        \"Незарегистрированный пользователь не должен иметь возможности читать посты\"",
+													"    ).to.be.eql(\"Unauthorized\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/api/v1/posts/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"v1",
+												"posts",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get_post_details // No Auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус-код ответа должен быть 401\", function () {",
+													"    pm.expect(",
+													"        pm.response.status,",
+													"        \"Незарегистрированный пользователь не должен иметь возможности читать посты\"",
+													"    ).to.be.eql(\"Unauthorized\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/api/v1/posts/{{post_with_group}}/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"v1",
+												"posts",
+												"{{post_with_group}}",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "update_post_with_patch_request // No Auth",
 									"event": [
 										{
@@ -3186,6 +2625,95 @@
 									"response": []
 								},
 								{
+									"name": "get_comments // No Auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус-код ответа должен быть 401\", function () {",
+													"    pm.expect(",
+													"        pm.response.status,",
+													"        \"Незарегистрированный пользователь не должен иметь возможности читать комментарии\"",
+													"    ).to.be.eql(\"Unauthorized\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/api/v1/posts/{{post_with_group}}/comments/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"v1",
+												"posts",
+												"{{post_with_group}}",
+												"comments",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "get_comment_details // No Auth",
+									"event": [
+										{
+											"listen": "test",
+											"script": {
+												"exec": [
+													"pm.test(\"Статус-код ответа должен быть 401\", function () {",
+													"    pm.expect(",
+													"        pm.response.status,",
+													"        \"Незарегистрированный пользователь не должен иметь возможности читать комментарии\"",
+													"    ).to.be.eql(\"Unauthorized\");",
+													"});",
+													""
+												],
+												"type": "text/javascript"
+											}
+										}
+									],
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8000/api/v1/posts/{{post_with_group}}/comments/{{comment_id_for_permission_tests}}/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8000",
+											"path": [
+												"api",
+												"v1",
+												"posts",
+												"{{post_with_group}}",
+												"comments",
+												"{{comment_id_for_permission_tests}}",
+												""
+											]
+										}
+									},
+									"response": []
+								},
+								{
 									"name": "updete_comment_with_patch_request // No Auth",
 									"event": [
 										{
@@ -3240,7 +2768,7 @@
 									"response": []
 								},
 								{
-									"name": "update_comment_with_put_request // No Auth",
+									"name": "update_commetn_with_put_request // No Auth",
 									"event": [
 										{
 											"listen": "test",
@@ -3341,10 +2869,10 @@
 							]
 						},
 						{
-							"name": "follow_tests",
+							"name": "group_tests // No Auth",
 							"item": [
 								{
-									"name": "get_follow // No Auth",
+									"name": "get_group_list // No Auth",
 									"event": [
 										{
 											"listen": "test",
@@ -3353,7 +2881,7 @@
 													"pm.test(\"Статус-код ответа должен быть 401\", function () {",
 													"    pm.expect(",
 													"        pm.response.status,",
-													"        \"Запрос незарегистрированного пользователя должен вернуть ответ с кодом 401\"",
+													"        \"Незарегистрированный пользователь не должен иметь возможности получать информацию о группах\"",
 													"    ).to.be.eql(\"Unauthorized\");",
 													"});",
 													""
@@ -3363,13 +2891,10 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
 										"method": "GET",
 										"header": [],
 										"url": {
-											"raw": "http://127.0.0.1:8000/api/v1/follow/",
+											"raw": "http://127.0.0.1:8000/api/v1/groups/",
 											"protocol": "http",
 											"host": [
 												"127",
@@ -3381,7 +2906,7 @@
 											"path": [
 												"api",
 												"v1",
-												"follow",
+												"groups",
 												""
 											]
 										}
@@ -3389,7 +2914,7 @@
 									"response": []
 								},
 								{
-									"name": "create_subscription // No Auth",
+									"name": "get_group_details // No Auth",
 									"event": [
 										{
 											"listen": "test",
@@ -3398,7 +2923,7 @@
 													"pm.test(\"Статус-код ответа должен быть 401\", function () {",
 													"    pm.expect(",
 													"        pm.response.status,",
-													"        \"Запрос незарегистрированного пользователя должен вернуть ответ с кодом 401\"",
+													"        \"Незарегистрированный пользователь не должен иметь возможности получать информацию о группах\"",
 													"    ).to.be.eql(\"Unauthorized\");",
 													"});",
 													""
@@ -3408,22 +2933,17 @@
 										}
 									],
 									"request": {
-										"auth": {
-											"type": "noauth"
-										},
-										"method": "POST",
-										"header": [],
-										"body": {
-											"mode": "raw",
-											"raw": "{\n    \"following\": \"{{adminUsername}}\"\n}",
-											"options": {
-												"raw": {
-													"language": "json"
-												}
+										"method": "GET",
+										"header": [
+											{
+												"key": "Authorization",
+												"value": "Token {{Token}}",
+												"type": "text",
+												"disabled": true
 											}
-										},
+										],
 										"url": {
-											"raw": "http://127.0.0.1:8000/api/v1/follow/",
+											"raw": "http://127.0.0.1:8000/api/v1/groups/{{group_id}}/",
 											"protocol": "http",
 											"host": [
 												"127",
@@ -3435,35 +2955,13 @@
 											"path": [
 												"api",
 												"v1",
-												"follow",
+												"groups",
+												"{{group_id}}",
 												""
 											]
 										}
 									},
 									"response": []
-								}
-							],
-							"auth": {
-								"type": "noauth"
-							},
-							"event": [
-								{
-									"listen": "prerequest",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
-								},
-								{
-									"listen": "test",
-									"script": {
-										"type": "text/javascript",
-										"exec": [
-											""
-										]
-									}
 								}
 							]
 						}
@@ -3814,7 +3312,7 @@
 							"response": []
 						},
 						{
-							"name": "get_existing_comment_with_wrong_url // Admin",
+							"name": "get_existing_comment_with_non_existing_post_id // Admin",
 							"event": [
 								{
 									"listen": "test",
@@ -3911,7 +3409,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"author\": \"{{userUsername}}\",\n    \"text\": \"Создаем пост от лица другого пользователя\"\n}",
+									"raw": "{\n    \"author\": \"{{userToken}}\",\n    \"text\": \"Создаем пост от лица другого пользователя\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -3984,7 +3482,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n    \"author\": \"{{userUsername}}\",\n    \"text\": \"Тестовый комментарий\"\n}",
+									"raw": "{\n    \"author\": \"{{userToken}}\",\n    \"text\": \"Тестовый комментарий\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -4014,326 +3512,19 @@
 							"response": []
 						}
 					]
-				},
-				{
-					"name": "delete_and_update_follow_not_available",
-					"item": [
-						{
-							"name": "update_follow_with_put_request // Admin",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Статус-код ответа должен быть 405\", function () {",
-											"    pm.expect(",
-											"        pm.response.status,",
-											"        \"API не должен предоставлять возможность изменения подписки\"",
-											"    ).to.be.eql(\"Method Not Allowed\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PUT",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"following\": \"{{adminUsername}}\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/v1/follow/",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"v1",
-										"follow",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "update_follow_with_patch_request // Admin",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Статус-код ответа должен быть 405\", function () {",
-											"    pm.expect(",
-											"        pm.response.status,",
-											"        \"API не должен предоставлять возможность изменения подписки\"",
-											"    ).to.be.eql(\"Method Not Allowed\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "PATCH",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"following\": \"{{adminUsername}}\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/v1/follow/",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"v1",
-										"follow",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "get_follow_details // Admin",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Статус-код ответа должен быть 404\", function () {",
-											"    pm.expect(",
-											"        pm.response.status,",
-											"        \"Эндпоинт `/api/v1/follow/{id}/` не должен быть реализован\"",
-											"    ).to.be.eql(\"Not Found\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "GET",
-								"header": [],
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/v1/follow/1/",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"v1",
-										"follow",
-										"1",
-										""
-									]
-								}
-							},
-							"response": []
-						},
-						{
-							"name": "delete_follow // Admin",
-							"event": [
-								{
-									"listen": "test",
-									"script": {
-										"exec": [
-											"pm.test(\"Статус-код ответа должен быть 405\", function () {",
-											"    pm.expect(",
-											"        pm.response.status,",
-											"        \"API не должен предоставлять возможность удаления подписки\"",
-											"    ).to.be.eql(\"Method Not Allowed\");",
-											"});"
-										],
-										"type": "text/javascript"
-									}
-								}
-							],
-							"request": {
-								"method": "DELETE",
-								"header": [],
-								"body": {
-									"mode": "raw",
-									"raw": "{\n    \"following\": \"{{adminUsername}}\"\n}",
-									"options": {
-										"raw": {
-											"language": "json"
-										}
-									}
-								},
-								"url": {
-									"raw": "http://127.0.0.1:8000/api/v1/follow/",
-									"protocol": "http",
-									"host": [
-										"127",
-										"0",
-										"0",
-										"1"
-									],
-									"port": "8000",
-									"path": [
-										"api",
-										"v1",
-										"follow",
-										""
-									]
-								}
-							},
-							"response": []
-						}
-					],
-					"auth": {
-						"type": "bearer",
-						"bearer": [
-							{
-								"key": "token",
-								"value": "{{userAccessToken}}",
-								"type": "string"
-							}
-						]
-					},
-					"event": [
-						{
-							"listen": "prerequest",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						},
-						{
-							"listen": "test",
-							"script": {
-								"type": "text/javascript",
-								"exec": [
-									""
-								]
-							}
-						}
-					]
-				},
-				{
-					"name": "create_subscription_for_other_user // User",
-					"event": [
-						{
-							"listen": "test",
-							"script": {
-								"exec": [
-									"const responseData = pm.response.json();",
-									"const responseSchema = {",
-									"    \"type\": \"object\",",
-									"    \"properties\":{",
-									"        \"user\": {\"type\": \"string\"},",
-									"        \"following\": {\"type\": \"string\"}",
-									"    },",
-									"    \"required\": [\"user\", \"following\"],",
-									"    \"additionalProperties\": false",
-									"};",
-									"",
-									"pm.test(\"Статус-код ответа должен быть 201\", function () {",
-									"    pm.expect(",
-									"        pm.response.status,",
-									"        \"На запрос зарегистрированного пользователя с корректными данными должен возвращаться ответ со статусом 201\"",
-									"    ).to.be.eql(\"Created\");",
-									"});",
-									"pm.test('Структура ответа должна соответствовать ожидаемой', function () {",
-									"    pm.response.to.have.jsonSchema(responseSchema);",
-									"});",
-									"pm.test('Значения полей в ответе должны соответствовать спецификации', function () {",
-									"    pm.expect(",
-									"        responseData.user,",
-									"        \"Убедитесь, что нельзя создать подписку для другого пользователя, передав его `username` в качестве значения поля `user`\"",
-									"    ).to.be.not.eql(pm.collectionVariables.get(\"secondUserUsername\"));",
-									"    pm.expect(",
-									"        responseData.following,",
-									"        \"Убедитесь, что в ответе на запрос значением поля `following` является `username` автора, на которого оформлена подписка\"",
-									"    ).to.be.eql(pm.collectionVariables.get(\"secondUserUsername\"));",
-									"});",
-									""
-								],
-								"type": "text/javascript"
-							}
-						}
-					],
-					"request": {
-						"auth": {
-							"type": "bearer",
-							"bearer": [
-								{
-									"key": "token",
-									"value": "{{userAccessToken}}",
-									"type": "string"
-								}
-							]
-						},
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"user\": \"{{adminUsername}}\",\n    \"following\": \"{{secondUserUsername}}\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://127.0.0.1:8000/api/v1/follow/",
-							"protocol": "http",
-							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
-							],
-							"port": "8000",
-							"path": [
-								"api",
-								"v1",
-								"follow",
-								""
-							]
-						}
-					},
-					"response": []
 				}
 			],
 			"auth": {
-				"type": "bearer",
-				"bearer": [
+				"type": "apikey",
+				"apikey": [
 					{
-						"key": "token",
-						"value": "{{adminAccessToken}}",
+						"key": "value",
+						"value": "Token {{adminToken}}",
+						"type": "string"
+					},
+					{
+						"key": "key",
+						"value": "Authorization",
 						"type": "string"
 					}
 				]
@@ -4374,7 +3565,8 @@
 									"        pm.response.status,",
 									"        \"На запрос автора поста должен возвращаться ответ со статусом 204\"",
 									"    ).to.be.eql(\"No Content\");",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -4382,11 +3574,16 @@
 					],
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
+							"type": "apikey",
+							"apikey": [
 								{
-									"key": "token",
-									"value": "{{userAccessToken}}",
+									"key": "value",
+									"value": "Token {{userToken}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
 									"type": "string"
 								}
 							]
@@ -4415,7 +3612,7 @@
 					"response": []
 				},
 				{
-					"name": "delete_negative_test_post // User",
+					"name": "delete_negative_test_post // Admin",
 					"event": [
 						{
 							"listen": "test",
@@ -4426,7 +3623,8 @@
 									"        pm.response.status,",
 									"        \"На запрос автора поста должен возвращаться ответ со статусом 204\"",
 									"    ).to.be.eql(\"No Content\");",
-									"});"
+									"});",
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -4434,11 +3632,16 @@
 					],
 					"request": {
 						"auth": {
-							"type": "bearer",
-							"bearer": [
+							"type": "apikey",
+							"apikey": [
 								{
-									"key": "token",
-									"value": "{{adminAccessToken}}",
+									"key": "value",
+									"value": "Token {{adminToken}}",
+									"type": "string"
+								},
+								{
+									"key": "key",
+									"value": "Authorization",
 									"type": "string"
 								}
 							]
@@ -4491,16 +3694,7 @@
 	],
 	"variable": [
 		{
-			"key": "secondUserUsername",
-			"value": "second_user",
-			"type": "string"
-		},
-		{
-			"key": "userAccessToken",
-			"value": ""
-		},
-		{
-			"key": "userRefreshToken",
+			"key": "userToken",
 			"value": ""
 		},
 		{
@@ -4508,11 +3702,7 @@
 			"value": ""
 		},
 		{
-			"key": "adminAccessToken",
-			"value": ""
-		},
-		{
-			"key": "adminRefreshToken",
+			"key": "adminToken",
 			"value": ""
 		},
 		{
