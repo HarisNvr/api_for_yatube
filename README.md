@@ -11,7 +11,7 @@
 ### Запуск проекта локально
 - Клонировать репозиторий и перейти в него в командной строке
 ```
-https://github.com/HarisNvr/CRUD_for_YATube.git
+https://github.com/HarisNvr/api_for_yatube.git
 cd api_yatube
 ```
 - Cоздать и активировать виртуальное окружение:
